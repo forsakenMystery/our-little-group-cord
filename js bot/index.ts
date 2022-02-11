@@ -51,26 +51,40 @@ client.on('messageCreate', (message)=>{
 })
 
 
-function gulag(who:string, guild:DiscordJS.Guild){
-    const one = new Promise<string>((resolve, reject) => {
+function gulag(who:string, guild:DiscordJS.Guild, caller:string){
+    const target = new Promise<string>((resolve, reject) => {
         
         guild?.members.fetch(who).then((member)=> {
             resolve(member.voice.channelId as string);
         })
     });
-    one.then(where=>{
-        guild?.members.fetch(who).then(member => {
-            member.voice.setChannel(process.env.GULAG!).then(()=>{
-                console.log("yay")
-            }).catch(console.error)
+    const aimer = new Promise<string>((resolve, reject) => {
+        
+        guild?.members.fetch(caller).then((member)=> {
+            resolve(member.voice.channelId as string);
         })
-        setTimeout(() => {   
-            guild?.members.fetch(who).then(member => {
-                member.voice.setChannel(where).then(()=>{
-                    console.log("whale cum black")
-                }).catch(console.error)
-            })
-        }, 3000);
+    });
+    target.then(where=>{
+        aimer.then(wheee=>{
+            if(wheee===where){
+                guild?.members.fetch(who).then(member => {
+                    member.voice.setChannel(process.env.GULAG!).then(()=>{
+                        console.log("yay")
+                    }).catch(console.error)
+                })
+                setTimeout(() => {   
+                    guild?.members.fetch(who).then(member => {
+                        member.voice.setChannel(where).then(()=>{
+                            console.log("whale cum black")
+                        }).catch(console.error)
+                    })
+                }, 3000);
+            }
+            else{
+                console.log("not in a same place")
+            }
+        })
+        
     })
 
 
@@ -90,7 +104,7 @@ client.on("interactionCreate", async (interaction) => {
             ephemeral:true,
         })
         const target:string = process.env.KAMRAN!
-        gulag(process.env.TEST!, interaction.guild!)
+        gulag(process.env.TEST!, interaction.guild!, interaction.member?.user.id!)
         
         // const guild = client.guilds.cache.get(process.env.OLG!)
         // const join:string = whereX(interaction.user.id)
