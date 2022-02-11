@@ -16,6 +16,10 @@ const client = new DiscordJS.Client(
         intents:[
             Intents.FLAGS.GUILDS,
             Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.GUILD_PRESENCES,
+            Intents.FLAGS.GUILD_VOICE_STATES,
+            Intents.FLAGS.GUILD_MEMBERS,
+            Intents.FLAGS.GUILD_INTEGRATIONS
         ]
     }
 )
@@ -46,41 +50,34 @@ client.on('messageCreate', (message)=>{
     }
 })
 
-function whereX(who:string): string{
-    const guild = client.guilds.cache.get(process.env.OLG!)
-    let before:string = ""
-    console.log("who"+who)
-    var beef=new Promise((resolve, reject)=>{
+
+function gulag(who:string, guild:DiscordJS.Guild){
+    const one = new Promise<string>((resolve, reject) => {
         
-    })
-    guild?.members.fetch(who).then(member=>{
-        before = member.voice.channelId as string
-        console.log("mem"+member.voice.channelId)
-    })
-    console.log("before"+before)
-    return before
-
-}
-
-function gulagX(who:string): boolean{
-    const guild = client.guilds.cache.get(process.env.OLG!)
-        const before:string = whereX(who)
+        guild?.members.fetch(who).then((member)=> {
+            resolve(member.voice.channelId as string);
+        })
+    });
+    one.then(where=>{
         guild?.members.fetch(who).then(member => {
             member.voice.setChannel(process.env.GULAG!).then(()=>{
                 console.log("yay")
             }).catch(console.error)
         })
-
         setTimeout(() => {   
             guild?.members.fetch(who).then(member => {
-                member.voice.setChannel(before).then(()=>{
+                member.voice.setChannel(where).then(()=>{
                     console.log("whale cum black")
                 }).catch(console.error)
             })
         }, 3000);
-        return true
+    })
+
 
 }
+
+
+
 
 client.on("interactionCreate", async (interaction) => {
     if(!interaction.isCommand()){
@@ -93,26 +90,27 @@ client.on("interactionCreate", async (interaction) => {
             ephemeral:true,
         })
         const target:string = process.env.KAMRAN!
-        // gulagX(process.env.TEST!)
-        const guild = client.guilds.cache.get(process.env.OLG!)
-        const join:string = whereX(interaction.user.id)
-        console.log(interaction.user.id)
-        console.log(join)
-        const connection = joinVoiceChannel({
-            channelId: join,
-            guildId: process.env.OLG!,
-            adapterCreator: guild?.voiceAdapterCreator!,
-        });
-        try{
-            console.log(connection.state)
-            await entersState(connection, VoiceConnectionStatus.Connecting, 5e3)
-            console.log("connecting")
-            await entersState(connection, VoiceConnectionStatus.Ready, 5e3)
-        }catch(error){
-            connection.destroy()
-            console.log("couldn't find you guys")
-            throw error
-        }
+        gulag(process.env.TEST!, interaction.guild!)
+        
+        // const guild = client.guilds.cache.get(process.env.OLG!)
+        // const join:string = whereX(interaction.user.id)
+        // console.log(interaction.user.id)
+        // console.log(join)
+        // const connection = joinVoiceChannel({
+        //     channelId: join,
+        //     guildId: process.env.OLG!,
+        //     adapterCreator: guild?.voiceAdapterCreator!,
+        // });
+        // try{
+        //     console.log(connection.state)
+        //     await entersState(connection, VoiceConnectionStatus.Connecting, 5e3)
+        //     console.log("connecting")
+        //     await entersState(connection, VoiceConnectionStatus.Ready, 5e3)
+        // }catch(error){
+        //     connection.destroy()
+        //     console.log("couldn't find you guys")
+        //     throw error
+        // }
         
 
     }
