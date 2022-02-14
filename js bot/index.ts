@@ -147,12 +147,10 @@ async function join_and_voice(who: string, guild: DiscordJS.Guild) {
     let resource = createAudioResource(
       createReadStream("./resources/try.mp3")
     );
-    // console.log(resource)
-    // console.log(generateDependencyReport());
+
     const subscribtion = connection.subscribe(player);
 
     player.play(resource);
-    // console.log(resource.metadata)
     if (subscribtion) {
       getAudioDurationInSeconds('./resources/try.mp3').then((duration)=>{
         setTimeout(() => {
