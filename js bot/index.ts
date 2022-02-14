@@ -20,7 +20,9 @@ import {
 } from "@discordjs/voice";
 import { createReadStream } from "fs";
 import {getAudioDurationInSeconds} from "get-audio-duration";
+const { MongoClient } = require("mongodb");
 var rwc = require("random-weighted-choice");
+
 var table:any;
 var voice_kamran:any;
 var voice_tts:any;
