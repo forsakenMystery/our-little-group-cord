@@ -9,15 +9,19 @@ import dotenv from "dotenv";
 import {
   joinVoiceChannel,
   createAudioPlayer,
+  AudioPlayer,
   createAudioResource,
   entersState,
   StreamType,
   AudioPlayerStatus,
   VoiceConnectionStatus,
   AudioResource,
+  generateDependencyReport,
 } from "@discordjs/voice";
+import { createReadStream } from "fs";
+import {getAudioDurationInSeconds} from "get-audio-duration";
 
-dotenv.config();
+dotenv.config(); 
 const client = new DiscordJS.Client({
   intents: [
     Intents.FLAGS.GUILDS,
@@ -93,24 +97,38 @@ async function gulag(who: string, guild: DiscordJS.Guild, caller: string) {
 }
 
 async function join_and_voice(who: string, guild: DiscordJS.Guild) {
-    const target = new Promise<string>((resolve, reject) => {
-        guild?.members.fetch(who).then((member) => {
-          resolve(member.voice.channelId as string);
-        });
-      });
-      
-      target.then((where) => {
-        const connection = joinVoiceChannel({
-            channelId: where,
-            guildId: guild.id,
-            adapterCreator: guild.voiceAdapterCreator!,
-        });
-        const audioplayer = createAudioPlayer();
-        connection.subscribe(audioplayer);
+  const target = new Promise<string>((resolve, reject) => {
+    guild?.members.fetch(who).then((member) => {
+      resolve(member.voice.channelId as string);
+    });
+  });
+
+  target.then((where) => {
+    const connection = joinVoiceChannel({
+      channelId: where,
+      guildId: guild.id,
+      adapterCreator: guild.voiceAdapterCreator!,
+    });
+    const player = createAudioPlayer();
+    let resource = createAudioResource(
+      createReadStream("./resources/try.mp3")
+    );
+    // console.log(resource)
+    // console.log(generateDependencyReport());
+    const subscribtion = connection.subscribe(player);
+
+    player.play(resource);
+    // console.log(resource.metadata)
+    if (subscribtion) {
+      getAudioDurationInSeconds('./resources/try.mp3').then((duration)=>{
+        setTimeout(() => {
+          subscribtion.unsubscribe();
+          connection.destroy();
+        }, (duration+10)*1000);
       })
-
+    }
+  });
 }
-
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) {
@@ -122,31 +140,22 @@ client.on("interactionCreate", async (interaction) => {
       content: "soon enough!",
       ephemeral: true,
     });
-    const target: string = process.env.KAMRAN!;
-    
-    
+    var target: string = process.env.KAMRAN!;
+    target = process.env.TEST!;
 
-
-    
     // let resource = createAudioResource(createReadStream(join(__dirname, 'resources/try.mp3')), {
     //     inlineVolume : true
     // });
-    await gulag(process.env.TEST!, interaction.guild!, interaction.member?.user.id!);
 
-    await join_and_voice(process.env.TEST!, interaction.guild!)
+    // await gulag(target, interaction.guild!, interaction.member?.user.id!);
 
-
-    
-    
-    
-
+    await join_and_voice(target, interaction.guild!);
 
     // connection.subscribe(player);
     // player.play(resource)
     // console.log("done");
 
     // await interaction.reply('I have joined the voice channel!');
-  
   }
 });
 
