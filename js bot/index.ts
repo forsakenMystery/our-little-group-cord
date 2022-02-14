@@ -21,6 +21,7 @@ import {
 import { createReadStream } from "fs";
 import {getAudioDurationInSeconds} from "get-audio-duration";
 
+let testValues:any;
 dotenv.config(); 
 const client = new DiscordJS.Client({
   intents: [
@@ -34,6 +35,18 @@ const client = new DiscordJS.Client({
 });
 
 client.on("ready", () => {
+  testValues = [{
+    value : './resources/1.mp3',
+    probability: 0.3
+},
+{
+    value : './resources/2.mp3',
+    probability: 0.6
+},
+{
+    value : './resources/fail.mp3',
+    probability: '*'
+}]
   console.log("bot is ready!");
   let guildID: string = process.env.OLG!;
   const guild = client.guilds.cache.get(guildID);
@@ -96,8 +109,35 @@ async function gulag(who: string, guild: DiscordJS.Guild, caller: string) {
   });
 }
 
+const randomizer = (values:any) => {
+  let i, pickedValue,
+          randomNr = Math.random(),
+          threshold = 0;
+
+  for (i = 0; i < values.length; i++) {
+      if (values[i].probability === '*') {
+          continue;
+      }
+
+      threshold += values[i].probability;
+      if (threshold > randomNr) {
+              pickedValue = values[i].value;
+              break;
+      }
+
+      if (!pickedValue) {
+          //nothing found based on probability value, so pick element marked with wildcard
+          pickedValue = values.filter((value:any) => value.probability === '*');
+      }
+  }
+
+  return pickedValue;
+}
+
 function choose():string{
-  return "./resources/try.mp3";
+  
+
+  return randomizer(testValues);
 }
 
 async function sentence(who: string, guild: DiscordJS.Guild, caller: string) {
@@ -128,7 +168,7 @@ async function sentence(who: string, guild: DiscordJS.Guild, caller: string) {
           subscribtion.unsubscribe();
           connection.destroy();
           gulag(who, guild, caller);
-        }, (duration+1)*1000);
+        }, (duration+2)*1000);
       })
     }
   });
