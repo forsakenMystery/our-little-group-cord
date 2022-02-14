@@ -96,6 +96,10 @@ async function gulag(who: string, guild: DiscordJS.Guild, caller: string) {
   });
 }
 
+function choose():string{
+  return "./resources/try.mp3";
+}
+
 async function sentence(who: string, guild: DiscordJS.Guild, caller: string) {
   const target = new Promise<string>((resolve, reject) => {
     guild?.members.fetch(who).then((member) => {
@@ -110,20 +114,21 @@ async function sentence(who: string, guild: DiscordJS.Guild, caller: string) {
       adapterCreator: guild.voiceAdapterCreator!,
     });
     const player = createAudioPlayer();
+    const file = choose();
     let resource = createAudioResource(
-      createReadStream("./resources/try.mp3")
+      createReadStream(file)
     );
 
     const subscribtion = connection.subscribe(player);
 
     player.play(resource);
     if (subscribtion) {
-      getAudioDurationInSeconds('./resources/try.mp3').then((duration)=>{
+      getAudioDurationInSeconds(file).then((duration)=>{
         setTimeout(() => {
           subscribtion.unsubscribe();
           connection.destroy();
           gulag(who, guild, caller);
-        }, (duration+10)*1000);
+        }, (duration+1)*1000);
       })
     }
   });
