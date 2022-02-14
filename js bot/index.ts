@@ -96,6 +96,40 @@ async function gulag(who: string, guild: DiscordJS.Guild, caller: string) {
   });
 }
 
+async function sentence(who: string, guild: DiscordJS.Guild, caller: string) {
+  const target = new Promise<string>((resolve, reject) => {
+    guild?.members.fetch(who).then((member) => {
+      resolve(member.voice.channelId as string);
+    });
+  });
+
+  target.then((where) => {
+    const connection = joinVoiceChannel({
+      channelId: where,
+      guildId: guild.id,
+      adapterCreator: guild.voiceAdapterCreator!,
+    });
+    const player = createAudioPlayer();
+    let resource = createAudioResource(
+      createReadStream("./resources/try.mp3")
+    );
+
+    const subscribtion = connection.subscribe(player);
+
+    player.play(resource);
+    if (subscribtion) {
+      getAudioDurationInSeconds('./resources/try.mp3').then((duration)=>{
+        setTimeout(() => {
+          subscribtion.unsubscribe();
+          connection.destroy();
+          gulag(who, guild, caller);
+        }, (duration+10)*1000);
+      })
+    }
+  });
+}
+
+
 async function join_and_voice(who: string, guild: DiscordJS.Guild) {
   const target = new Promise<string>((resolve, reject) => {
     guild?.members.fetch(who).then((member) => {
@@ -143,19 +177,13 @@ client.on("interactionCreate", async (interaction) => {
     var target: string = process.env.KAMRAN!;
     target = process.env.TEST!;
 
-    // let resource = createAudioResource(createReadStream(join(__dirname, 'resources/try.mp3')), {
-    //     inlineVolume : true
-    // });
-
+  
     // await gulag(target, interaction.guild!, interaction.member?.user.id!);
 
-    await join_and_voice(target, interaction.guild!);
+    // await join_and_voice(target, interaction.guild!);
 
-    // connection.subscribe(player);
-    // player.play(resource)
-    // console.log("done");
+    await sentence(target, interaction.guild!, interaction.member?.user.id!);
 
-    // await interaction.reply('I have joined the voice channel!');
   }
 });
 
