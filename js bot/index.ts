@@ -177,10 +177,7 @@ client.on("interactionCreate", async (interaction) => {
     var target: string = process.env.KAMRAN!;
     target = process.env.TEST!;
 
-  
-    // await gulag(target, interaction.guild!, interaction.member?.user.id!);
 
-    // await join_and_voice(target, interaction.guild!);
 
     await sentence(target, interaction.guild!, interaction.member?.user.id!);
 
