@@ -1,3 +1,4 @@
 .env
 env/
 js bot/node_modules/
+resources/
