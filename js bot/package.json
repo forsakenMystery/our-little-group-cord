@@ -18,7 +18,11 @@
     "fs": "^0.0.1-security",
     "get-audio-duration": "^3.0.0",
     "mongodb": "^4.3.1",
+    "nodemon": "^2.0.15",
     "random-weighted-choice": "^0.1.4",
-    "tweetnacl": "^1.0.3"
+    "ts-node": "^10.5.0",
+    "tweetnacl": "^1.0.3",
+    "typescript": "^4.5.5",
+    "yarn": "^1.22.17"
   }
 }
