@@ -7,6 +7,14 @@ import { IntentOptions } from "./config/IntentOptions";
 import dotenv from "dotenv";
 dotenv.config();
 
+declare global {
+  var table: any;
+  var voice_kamran: any;
+  var voice_tts: any;
+  var voice_fail: any;
+  var voice_hassan_fail: any;
+}
+
 (async () => {
   validateEnv();
 
