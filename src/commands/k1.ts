@@ -14,7 +14,6 @@ export const k1: CommandInterface = {
         ephemeral: true,
       });
       var target: string = process.env.KEYVAN!;
-      target = process.env.TEST!;
       await k1muter(target, 5, interaction.guild!);
 
       return;

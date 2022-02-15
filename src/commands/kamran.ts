@@ -16,7 +16,6 @@ export const kamran: CommandInterface = {
         ephemeral: true,
       });
       var target: string = process.env.KAMRAN!;
-      target = process.env.TEST!;
 
       await sentence(target, interaction.guild!, interaction.member?.user.id!);
 
