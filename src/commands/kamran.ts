@@ -19,7 +19,7 @@ export const kamran: CommandInterface = {
     try {
       return;
     } catch (err) {
-      errorHandler("edit command", err);
+      errorHandler("kamran command", err);
     }
   },
 };

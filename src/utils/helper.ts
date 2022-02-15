@@ -8,6 +8,9 @@ import { createReadStream } from "fs";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 var rwc = require("random-weighted-choice");
 
+declare global {
+  var successful: boolean;
+}
 async function gulag(who: string, guild: Guild, caller: string) {
   const target = new Promise<string>((resolve, reject) => {
     guild?.members.fetch(who).then((member) => {
@@ -84,8 +87,10 @@ function choose(caller: string): string {
   globalThis.table.forEach((element: any) => {
     if (element.id === what_to_do) {
       if (what_to_do === "fail") {
+        successful = false;
         element.weight = 1;
       } else {
+        successful = true;
         element.weight = 4;
       }
     } else {
