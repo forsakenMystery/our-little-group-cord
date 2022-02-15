@@ -248,7 +248,7 @@ async function sentence(who: string, guild: DiscordJS.Guild, caller: string) {
           subscribtion.unsubscribe();
           connection.destroy();
           gulag(who, guild, caller);
-        }, (duration+3)*1000);
+        }, (duration+2)*1000);
       })
     }
   });
