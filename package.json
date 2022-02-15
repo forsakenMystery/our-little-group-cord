@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
+    "@discordjs/rest": "^0.3.0",
     "@discordjs/voice": "^0.8.0",
     "@sentry/node": "^6.17.8",
     "@sentry/tracing": "^6.17.8",
