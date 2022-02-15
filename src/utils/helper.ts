@@ -10,19 +10,19 @@ var rwc = require("random-weighted-choice");
 
 async function gulag(who: string, guild: Guild, caller: string) {
   const target = new Promise<string>((resolve, reject) => {
-    guild?.members.fetch(who).then((member: any) => {
+    guild?.members.fetch(who).then((member) => {
       resolve(member.voice.channelId as string);
     });
   });
   const aimer = new Promise<string>((resolve, reject) => {
-    guild?.members.fetch(caller).then((member: any) => {
+    guild?.members.fetch(caller).then((member) => {
       resolve(member.voice.channelId as string);
     });
   });
   target.then((where) => {
     aimer.then((wheee) => {
       if (wheee === where) {
-        guild?.members.fetch(who).then((member: any) => {
+        guild?.members.fetch(who).then((member) => {
           member.voice
             .setChannel(process.env.GULAG!)
             .then(() => {
@@ -31,7 +31,7 @@ async function gulag(who: string, guild: Guild, caller: string) {
             .catch(console.error);
         });
         setTimeout(() => {
-          guild?.members.fetch(who).then((member: any) => {
+          guild?.members.fetch(who).then((member) => {
             member.voice
               .setChannel(where)
               .then(() => {
@@ -144,4 +144,27 @@ function choose(caller: string): string {
   return decision;
 }
 
+async function k1muter(who: string, duration: number, guild: Guild) {
+  const target = new Promise<string>((resolve, reject) => {
+    guild?.members.fetch(who).then((member) => {
+      resolve(member.voice.channelId as string);
+    });
+  });
+
+  target.then((where) => {
+    guild?.members.fetch(who).then((member) => {
+      member.voice
+        .setMute(true)
+        .then(() => {
+          console.log("The Hoe is Muted for " + duration + " seconds");
+          setTimeout(() => {
+            member.voice.setMute(false);
+          }, duration * 1000);
+        })
+        .catch(console.error);
+    });
+  });
+}
+
 export { sentence as sentence };
+export { k1muter as k1muter };

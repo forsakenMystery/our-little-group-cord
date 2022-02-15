@@ -1,13 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInterface } from "../interface/CommandInterface";
 import { errorHandler } from "../utils/errorHandler";
-import DiscordJS, {
-  Guild,
-  GuildMember,
-  Intents,
-  Interaction,
-  VoiceChannel,
-} from "discord.js";
+import { k1muter } from "../utils/helper";
 
 export const k1: CommandInterface = {
   data: new SlashCommandBuilder()
@@ -28,24 +22,3 @@ export const k1: CommandInterface = {
     }
   },
 };
-async function k1muter(who: string, duration: number, guild: DiscordJS.Guild) {
-  const target = new Promise<string>((resolve, reject) => {
-    guild?.members.fetch(who).then((member) => {
-      resolve(member.voice.channelId as string);
-    });
-  });
-
-  target.then((where) => {
-    guild?.members.fetch(who).then((member) => {
-      member.voice
-        .setMute(true)
-        .then(() => {
-          console.log("The Hoe is Muted for " + duration + " seconds");
-          setTimeout(() => {
-            member.voice.setMute(false);
-          }, duration * 1000);
-        })
-        .catch(console.error);
-    });
-  });
-}
