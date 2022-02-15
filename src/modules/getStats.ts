@@ -1,8 +1,11 @@
 import { errorHandler } from "../utils/errorHandler";
-import Stat, { statInterface } from "../database/models/our_little_group_stat_model";
+import Stat, {
+  statInterface,
+} from "../database/models/our_little_group_stat_model";
 
 export const getCamperData = async (
-  id: string, name:string
+  id: string,
+  name: string
 ): Promise<statInterface | undefined> => {
   try {
     const target = await Stat.findOne({ discordId: id });

@@ -10,5 +10,4 @@ export const validateEnv = (): void => {
     logHandler.log("warn", "Missing MongoDB connection.");
     process.exit(1);
   }
-
 };

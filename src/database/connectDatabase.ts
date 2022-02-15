@@ -1,4 +1,3 @@
-
 import { connect } from "mongoose";
 import { errorHandler } from "../utils/errorHandler";
 import { logHandler } from "../utils/logHandler";
