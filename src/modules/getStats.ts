@@ -3,9 +3,9 @@ import Stat, {
   statInterface,
 } from "../database/models/our_little_group_stat_model";
 
-export const getCamperData = async (
+export const getStats = async (
   id: string,
-  name: string
+  named: string
 ): Promise<statInterface | undefined> => {
   try {
     const target = await Stat.findOne({ discordId: id });
@@ -16,7 +16,7 @@ export const getCamperData = async (
 
     const newStat = await Stat.create({
       discordId: id,
-      name: name,
+      name: named,
       kill: 0,
       death: 0,
     });

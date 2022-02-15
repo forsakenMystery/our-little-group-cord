@@ -1,7 +1,7 @@
 import { statInterface } from "../database/models/our_little_group_stat_model";
 import { errorHandler } from "../utils/errorHandler";
 
-export const updateCamperData = async (
+export const updateStats = async (
   Stats: statInterface,
   successful: boolean = true,
   kill_value: number = 1,

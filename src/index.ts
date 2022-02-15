@@ -13,6 +13,7 @@ declare global {
   var voice_tts: any;
   var voice_fail: any;
   var voice_hassan_fail: any;
+  var successful: boolean;
 }
 
 (async () => {
