@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts"
   },
@@ -21,6 +22,7 @@
     "express": "^4.17.3",
     "fs": "^0.0.1-security",
     "get-audio-duration": "^3.0.0",
+    "node": "^16.10.0",
     "mongodb": "^4.3.1",
     "mongoose": "^6.2.1",
     "nodemon": "^2.0.15",
