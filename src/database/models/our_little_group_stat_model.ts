@@ -16,7 +16,7 @@ export const Stat = new Schema({
   },
   death: {
     type: Number,
-    default: Date.now(),
+    default: 0,
   },
 });
 
